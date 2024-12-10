@@ -1,7 +1,7 @@
 {
-    "name": "BLACKCAT",
-    "description": "A grey cat for test",
-    "image": "ipfs://QmT8s79Y8vxHUdrRLy8rdRgp2BeK4nc7MEG9VPnVBXTKUy",
+    "name": "BLUECAT",
+    "description": "A blue cat for test",
+    "image": "ipfs://QmSYwsJAMBqMWiHi5vz61xLkB5zviXfSWx8HUyCySEzhjz",
     "attributes": [
       {
         "trait_type": "Background",
@@ -9,7 +9,7 @@
       },
       {
         "trait_type": "Rarity",
-        "value": "Normal"
+        "value": "Rare"
       }
     ]
   }

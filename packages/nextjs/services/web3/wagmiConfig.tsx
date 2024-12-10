@@ -18,7 +18,7 @@ export const wagmiConfig = createConfig({
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
-    const tenderlyRpcUrl = 'https://virtual.mainnet.rpc.tenderly.co/3020973c-06d6-4afc-9c92-f8cb3002ff8c';
+    const tenderlyRpcUrl = 'https://virtual.mainnet.rpc.tenderly.co/18a187fb-c6ed-41f2-b5fa-48ddf9bf3bfe';
     const rpcFallbacks = [http(tenderlyRpcUrl), http()];
 
 

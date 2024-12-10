@@ -2,118 +2,91 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
-import "../contracts/NFTCollection.sol";
+import "../contracts/NFTCollection.sol"; // 导入合约文件
 
 contract NFTCollectionTest is Test {
-    NFTCollection public nft;
+    NFTCollection public nftCollection;
     address public owner;
-    address public buyer;
+    address public bidder1;
+    address public bidder2;
+
+    uint256 public tokenId;
+    string public ipfsUrl = "ipfs://sample-uri";
 
     function setUp() public {
-        // 设置测试账户
-        owner = address(1);
-        buyer = address(2);
+        // 设置初始账户
+        owner = address(0x1);
+        bidder1 = address(0x2);
+        bidder2 = address(0x3);
 
-        // 为账户添加测试资金
-        vm.deal(owner, 100 ether);
-        vm.deal(buyer, 100 ether);
-
-        // 部署合约并铸造一个初始 NFT
-        nft = new NFTCollection("Test NFT", "TNFT", owner, "ipfs://test-uri");
-    }
-
-    function testMintedNFT() public {
-        // 检查 NFT 初始状态
-        assertEq(nft.tokenCounter(), 1);
-        assertEq(nft.ownerOf(0), owner);
-        assertEq(nft.tokenURI(0), "ipfs://test-uri");
+        // 部署 NFT 合约
+        nftCollection = new NFTCollection("TestNFT", "TNFT", owner, ipfsUrl);
+        tokenId = 0; // 假设NFT的ID为0
     }
 
     function testListNFT() public {
-        vm.prank(owner); // 模拟 owner 调用
-        nft.listNFT(0, 1 ether);
+        uint256 startingPrice = 1 ether;
+        uint256 duration = 1 days;
 
-        (uint256 price, address seller) = nft.listings(0);
+        // 授权NFT列出
+        vm.startPrank(owner);
+        nftCollection.listNFT(startingPrice, duration);
+        vm.stopPrank();
 
-        // 验证 NFT 列表状态
-        assertEq(price, 1 ether);
-        assertEq(seller, owner);
+        // 验证NFT是否被列出
+        bool listed = nftCollection.isNFTListed();
+        assertTrue(listed, "NFT should be listed for auction");
     }
 
-    function testBuyNFT() public {
-        // 上架 NFT
-        vm.prank(owner);
-        nft.listNFT(0, 1 ether);
+    function testBid() public {
+        uint256 startingPrice = 1 ether;
+        uint256 duration = 1 days;
 
-        // 验证买家余额和卖家余额变化
-        uint256 buyerInitialBalance = buyer.balance;
-        uint256 ownerInitialBalance = owner.balance;
+        // 列出NFT拍卖
+        vm.startPrank(owner);
+        nftCollection.listNFT(startingPrice, duration);
+        vm.stopPrank();
 
-        console.log("Buyer balance before: ", buyer.balance);
+        // 执行第一次出价
+        vm.deal(bidder1, 2 ether); // 给 bidder1 足够的ETH
+        vm.startPrank(bidder1);
+        nftCollection.bid{value: 2 ether}();
+        vm.stopPrank();
 
-        vm.prank(buyer);
-        nft.buyNFT{value: 1 ether}(0);
-
-        console.log("Buyer balance after: ", buyer.balance);
-
-        // 验证 NFT 新所有者
-        assertEq(nft.ownerOf(0), buyer);
-
-        // 验证以太币转账
-        assertEq(owner.balance, ownerInitialBalance + 1 ether);
-        assertEq(buyer.balance, buyerInitialBalance - 1 ether);
-
-        // 验证 Listing 被清除
-        (uint256 price, address seller) = nft.listings(0);
-        assertEq(price, 0);
-        assertEq(seller, address(0));
+        // 验证最高出价者
+        address highestBidder = nftCollection.getHighestBidder();
+        uint256 highestBid = nftCollection.getHighestBid();
+        assertEq(highestBidder, bidder1, "Highest bidder should be bidder1");
+        assertEq(highestBid, 2 ether, "Highest bid should be 2 ether");
     }
 
-    function testCancelListing() public {
-        // 上架 NFT
-        vm.prank(owner);
-        nft.listNFT(0, 1 ether);
+    function testEndAuction() public {
+        uint256 startingPrice = 1 ether;
+        uint256 duration = 1 days;
 
-        // 取消上架
-        vm.prank(owner);
-        nft.cancelListing(0);
+        // 列出NFT拍卖
+        vm.startPrank(owner);
+        nftCollection.listNFT(startingPrice, duration);
+        vm.stopPrank();
 
-        // 验证 Listing 被清除
-        (uint256 price, address seller) = nft.listings(0);
-        assertEq(price, 0);
-        assertEq(seller, address(0));
-    }
+        // 执行出价
+        vm.deal(bidder1, 3 ether);
+        vm.startPrank(bidder1);
+        nftCollection.bid{value: 2 ether}();
+        vm.stopPrank();
 
-    function testCannotBuyWithoutEnoughFunds() public {
-        // 上架 NFT
-        vm.prank(owner);
-        nft.listNFT(0, 1 ether);
+        // 结束拍卖
+        vm.warp(block.timestamp + 2 days); // 模拟时间流逝
+        vm.startPrank(owner);
+        nftCollection.endAuction();
+        vm.stopPrank();
 
-        // 模拟买家尝试支付不足金额
-        vm.prank(buyer);
-        vm.expectRevert("Incorrect price sent");
-        nft.buyNFT{value: 0.5 ether}(0);
-    }
-
-    function testCannotBuyOwnNFT() public {
-        // 上架 NFT
-        vm.prank(owner);
-        nft.listNFT(0, 1 ether);
-
-        // 模拟卖家尝试购买自己的 NFT
-        vm.prank(owner);
-        vm.expectRevert("Seller cannot buy their own NFT");
-        nft.buyNFT{value: 1 ether}(0);
-    }
-
-    function testCannotCancelListingNotOwner() public {
-        // 上架 NFT
-        vm.prank(owner);
-        nft.listNFT(0, 1 ether);
-
-        // 模拟非所有者取消上架
-        vm.prank(buyer);
-        vm.expectRevert("You are not the seller");
-        nft.cancelListing(0);
+        // 验证NFT转移
+        address highestBidder = nftCollection.getHighestBidder();
+        assertEq(
+            highestBidder,
+            bidder1,
+            "Highest bidder should receive the NFT"
+        );
     }
 }

@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   1: {
     NFTFactory: {
-      address: "0x907bbba380fdea600b92ce75b5aade87149ec188",
+      address: "0x04a7f631c2f46711a70a5a73218acc67206a82dd",
       abi: [
         {
           type: "constructor",
@@ -78,7 +78,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     NFTCollection: {
-      address: "0xed1Cc0520C8985A993814334F691401571171048",
+      address: "0x9B2c8EbCb3e814cD1BEdbc6d22c262C55ba950A6",
       abi: [
         {
           type: "constructor",
@@ -126,6 +126,39 @@ const deployedContracts = {
         },
         {
           type: "function",
+          name: "auction",
+          inputs: [],
+          outputs: [
+            {
+              name: "seller",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "startingPrice",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "endTime",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "highestBidder",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "highestBid",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
           name: "balanceOf",
           inputs: [
             {
@@ -145,27 +178,34 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "buyNFT",
-          inputs: [
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
+          name: "bid",
+          inputs: [],
           outputs: [],
           stateMutability: "payable",
         },
         {
           type: "function",
-          name: "cancelListing",
+          name: "bidders",
           inputs: [
             {
-              name: "tokenId",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
           ],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "endAuction",
+          inputs: [],
           outputs: [],
           stateMutability: "nonpayable",
         },
@@ -190,14 +230,47 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "getNFTPrice",
-          inputs: [
+          name: "getEndTime",
+          inputs: [],
+          outputs: [
             {
-              name: "tokenId",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
           ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getHighestBid",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getHighestBidder",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getPendingRefundAmount",
+          inputs: [],
           outputs: [
             {
               name: "",
@@ -234,13 +307,7 @@ const deployedContracts = {
         {
           type: "function",
           name: "isNFTListed",
-          inputs: [
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
+          inputs: [],
           outputs: [
             {
               name: "",
@@ -255,42 +322,18 @@ const deployedContracts = {
           name: "listNFT",
           inputs: [
             {
-              name: "tokenId",
+              name: "startingPrice",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "price",
+              name: "duration",
               type: "uint256",
               internalType: "uint256",
             },
           ],
           outputs: [],
           stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "listings",
-          inputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "price",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "seller",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          stateMutability: "view",
         },
         {
           type: "function",
@@ -839,6 +882,39 @@ const deployedContracts = {
         },
         {
           type: "function",
+          name: "auction",
+          inputs: [],
+          outputs: [
+            {
+              name: "seller",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "startingPrice",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "endTime",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "highestBidder",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "highestBid",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
           name: "balanceOf",
           inputs: [
             {
@@ -858,27 +934,34 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "buyNFT",
-          inputs: [
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
+          name: "bid",
+          inputs: [],
           outputs: [],
           stateMutability: "payable",
         },
         {
           type: "function",
-          name: "cancelListing",
+          name: "bidders",
           inputs: [
             {
-              name: "tokenId",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
           ],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "endAuction",
+          inputs: [],
           outputs: [],
           stateMutability: "nonpayable",
         },
@@ -903,14 +986,47 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "getNFTPrice",
-          inputs: [
+          name: "getEndTime",
+          inputs: [],
+          outputs: [
             {
-              name: "tokenId",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
           ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getHighestBid",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getHighestBidder",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getPendingRefundAmount",
+          inputs: [],
           outputs: [
             {
               name: "",
@@ -947,13 +1063,7 @@ const deployedContracts = {
         {
           type: "function",
           name: "isNFTListed",
-          inputs: [
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
+          inputs: [],
           outputs: [
             {
               name: "",
@@ -968,42 +1078,18 @@ const deployedContracts = {
           name: "listNFT",
           inputs: [
             {
-              name: "tokenId",
+              name: "startingPrice",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "price",
+              name: "duration",
               type: "uint256",
               internalType: "uint256",
             },
           ],
           outputs: [],
           stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "listings",
-          inputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "price",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "seller",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          stateMutability: "view",
         },
         {
           type: "function",
