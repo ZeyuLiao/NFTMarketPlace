@@ -1,0 +1,16 @@
+{
+    "name": "BLACKCAT",
+    "description": "A grey cat for test",
+    "image": "ipfs://QmT8s79Y8vxHUdrRLy8rdRgp2BeK4nc7MEG9VPnVBXTKUy",
+    "attributes": [
+      {
+        "trait_type": "Background",
+        "value": "Blue"
+      },
+      {
+        "trait_type": "Rarity",
+        "value": "Normal"
+      }
+    ]
+  }
+  

@@ -6,6 +6,13 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract NFTCollection is ERC721URIStorage {
     uint256 public tokenCounter;
 
+    struct Listing {
+        uint256 price;
+        address seller;
+    }
+
+    mapping(uint256 => Listing) public listings;
+
     constructor(
         string memory name,
         string memory symbol,
@@ -18,25 +25,52 @@ contract NFTCollection is ERC721URIStorage {
         tokenCounter += 1;
     }
 
-    function getTokenURI(uint256 tokenId) public view returns (string memory) {
-        return tokenURI(tokenId);
+    // List NFT for sale
+    function listNFT(uint256 tokenId, uint256 price) external {
+        require(ownerOf(tokenId) == msg.sender, "You are not the owner");
+        require(price > 0, "Price must be greater than 0");
+
+        listings[tokenId] = Listing({price: price, seller: msg.sender});
     }
 
-    // 铸造一个新的 NFT
-    function mintNFT(address to, string memory ipfsUrl) public {
-        uint256 newTokenId = tokenCounter;
-        _safeMint(to, newTokenId);
-        _setTokenURI(newTokenId, ipfsUrl);
-        tokenCounter += 1;
+    // Cancel listing
+    function cancelListing(uint256 tokenId) external {
+        require(
+            listings[tokenId].seller == msg.sender,
+            "You are not the seller"
+        );
+
+        delete listings[tokenId];
     }
 
-    // 销毁一个 NFT
-    function burnNFT(uint256 tokenId) public {
-        _burn(tokenId);
+    // Purchase NFT
+    function buyNFT(uint256 tokenId) external payable {
+        Listing memory listing = listings[tokenId];
+
+        require(listing.price > 0, "NFT is not listed for sale");
+        require(msg.value == listing.price, "Incorrect price sent");
+        require(
+            listing.seller != msg.sender,
+            "Seller cannot buy their own NFT"
+        );
+
+        // Transfer NFT
+        _transfer(listing.seller, msg.sender, tokenId);
+
+        // Pay the seller
+        payable(listing.seller).transfer(msg.value);
+
+        // Remove Listing
+        delete listings[tokenId];
     }
 
-    // 转移 NFT
-    function transferNFT(address to, uint256 tokenId) public {
-        safeTransferFrom(msg.sender, to, tokenId);
+    // Get NFT price
+    function getNFTPrice(uint256 tokenId) external view returns (uint256) {
+        return listings[tokenId].price;
+    }
+
+    // Check if NFT is listed for sale
+    function isNFTListed(uint256 tokenId) external view returns (bool) {
+        return listings[tokenId].price > 0;
     }
 }

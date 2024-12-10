@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   1: {
     NFTFactory: {
-      address: "0x0861d353ece913d3c03f1c3396435e34f91122e4",
+      address: "0x907bbba380fdea600b92ce75b5aade87149ec188",
       abi: [
         {
           type: "constructor",
@@ -74,73 +74,11 @@ const deployedContracts = {
           ],
           stateMutability: "view",
         },
-        {
-          type: "function",
-          name: "getCollection",
-          inputs: [
-            {
-              name: "index",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "getCollectionOwner",
-          inputs: [
-            {
-              name: "collection",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "getCollectionTokenURI",
-          inputs: [
-            {
-              name: "collection",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          stateMutability: "view",
-        },
       ],
       inheritedFunctions: {},
     },
     NFTCollection: {
-      address: "0x78069cda997f2722eb6fa16c7f78dd9e49c3c200",
+      address: "0xed1Cc0520C8985A993814334F691401571171048",
       abi: [
         {
           type: "constructor",
@@ -207,7 +145,20 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "burnNFT",
+          name: "buyNFT",
+          inputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "payable",
+        },
+        {
+          type: "function",
+          name: "cancelListing",
           inputs: [
             {
               name: "tokenId",
@@ -239,7 +190,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "getTokenURI",
+          name: "getNFTPrice",
           inputs: [
             {
               name: "tokenId",
@@ -250,8 +201,8 @@ const deployedContracts = {
           outputs: [
             {
               name: "",
-              type: "string",
-              internalType: "string",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           stateMutability: "view",
@@ -282,21 +233,64 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "mintNFT",
+          name: "isNFTListed",
           inputs: [
             {
-              name: "to",
-              type: "address",
-              internalType: "address",
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "listNFT",
+          inputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              name: "ipfsUrl",
-              type: "string",
-              internalType: "string",
+              name: "price",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           outputs: [],
           stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "listings",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "price",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "seller",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
         },
         {
           type: "function",
@@ -472,24 +466,6 @@ const deployedContracts = {
               type: "address",
               internalType: "address",
             },
-            {
-              name: "to",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "transferNFT",
-          inputs: [
             {
               name: "to",
               type: "address",
@@ -811,68 +787,6 @@ const deployedContracts = {
           ],
           stateMutability: "view",
         },
-        {
-          type: "function",
-          name: "getCollection",
-          inputs: [
-            {
-              name: "index",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "getCollectionOwner",
-          inputs: [
-            {
-              name: "collection",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "getCollectionTokenURI",
-          inputs: [
-            {
-              name: "collection",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          stateMutability: "view",
-        },
       ],
       inheritedFunctions: {},
     },
@@ -944,7 +858,20 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "burnNFT",
+          name: "buyNFT",
+          inputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "payable",
+        },
+        {
+          type: "function",
+          name: "cancelListing",
           inputs: [
             {
               name: "tokenId",
@@ -976,7 +903,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "getTokenURI",
+          name: "getNFTPrice",
           inputs: [
             {
               name: "tokenId",
@@ -987,8 +914,8 @@ const deployedContracts = {
           outputs: [
             {
               name: "",
-              type: "string",
-              internalType: "string",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           stateMutability: "view",
@@ -1019,21 +946,64 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "mintNFT",
+          name: "isNFTListed",
           inputs: [
             {
-              name: "to",
-              type: "address",
-              internalType: "address",
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "listNFT",
+          inputs: [
+            {
+              name: "tokenId",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              name: "ipfsUrl",
-              type: "string",
-              internalType: "string",
+              name: "price",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           outputs: [],
           stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "listings",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "price",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "seller",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
         },
         {
           type: "function",
@@ -1209,24 +1179,6 @@ const deployedContracts = {
               type: "address",
               internalType: "address",
             },
-            {
-              name: "to",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "tokenId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "transferNFT",
-          inputs: [
             {
               name: "to",
               type: "address",

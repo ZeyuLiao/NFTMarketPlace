@@ -5,6 +5,7 @@ import { createConfig } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
+
 const { targetNetworks } = scaffoldConfig;
 
 // We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
@@ -17,16 +18,17 @@ export const wagmiConfig = createConfig({
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
-    const alchemyHttpUrl = getAlchemyHttpUrl(chain.id);
-    const rpcFallbacks = alchemyHttpUrl ? [http(), http(alchemyHttpUrl)] : [http()];
+    const tenderlyRpcUrl = 'https://virtual.mainnet.rpc.tenderly.co/3020973c-06d6-4afc-9c92-f8cb3002ff8c';
+    const rpcFallbacks = [http(tenderlyRpcUrl), http()];
+
 
     return createClient({
       chain,
       transport: fallback(rpcFallbacks),
       ...(chain.id !== (hardhat as Chain).id
         ? {
-            pollingInterval: scaffoldConfig.pollingInterval,
-          }
+          pollingInterval: scaffoldConfig.pollingInterval,
+        }
         : {}),
     });
   },
